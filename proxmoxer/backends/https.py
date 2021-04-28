@@ -139,7 +139,10 @@ class ProxmoxHTTPApiTokenAuth(ProxmoxHTTPAuthBase):
         self.token_value = token_value
 
     def __call__(self, r):
-        r.headers["Authorization"] = "{0}APIToken={1}!{2}={3}".format(self.service, self.username, self.token_name, self.token_value)
+        if self.service == "PBS":
+            r.headers["Authorization"] = "PBSAPIToken={0}!{1}:{2}".format(self.username, self.token_name, self.token_value)
+        else:
+            r.headers["Authorization"] = "{0}APIToken={1}!{2}={3}".format(self.service, self.username, self.token_name, self.token_value)
         return r
 
 
